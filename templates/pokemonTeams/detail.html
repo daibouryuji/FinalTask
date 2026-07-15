@@ -1,0 +1,417 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ team.title }}
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .detail-container {
+        width: 88%;
+        max-width: 1100px;
+        margin: 40px auto;
+    }
+
+    .team-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 28px;
+        margin-bottom: 32px;
+        border-top: 6px solid #e53935;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .15);
+    }
+
+    .team-title {
+        margin: 0 0 12px;
+        font-size: 30px;
+        color: #c62828;
+        overflow-wrap: anywhere;
+    }
+
+    .author {
+        margin: 0 0 20px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .description {
+        margin: 0;
+        line-height: 1.7;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        color: #333;
+    }
+
+    .section-title {
+        margin: 0 0 22px;
+        padding-left: 12px;
+        border-left: 6px solid #e53935;
+        font-size: 24px;
+        color: #333;
+    }
+
+    .pokemon-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 330px));
+        justify-content: center;
+        align-items: start;
+        gap: 22px;
+    }
+
+    .pokemon-card {
+        position: relative;
+        width: 100%;
+        box-sizing: border-box;
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 14px;
+        padding: 20px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, .14);
+    }
+
+    .slot-badge {
+        position: absolute;
+        top: 3px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        background: #e53935;
+        color: white;
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: bold;
+        z-index: 10;
+    }
+
+    .pokemon-image {
+        width: 100%;
+        height: 190px;
+        margin-top: 18px;
+        margin-bottom: 16px;
+        border-radius: 10px;
+        background: #f7f7f7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .pokemon-image img {
+        width: 180px;
+        height: 180px;
+        object-fit: contain;
+        display: block;
+    }
+
+    .pokemon-name {
+        margin: 0 0 16px;
+        padding-right: 80px;
+        min-height: 28px;
+        font-size: 22px;
+        font-weight: bold;
+        color: #222;
+        overflow-wrap: anywhere;
+    }
+
+    .info-row {
+        margin: 9px 0;
+        font-size: 15px;
+        color: #333;
+        overflow-wrap: anywhere;
+    }
+
+    .label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .status-box {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 6px;
+        margin: 17px 0;
+    }
+
+    .status-item {
+        min-width: 0;
+        padding: 8px 3px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .status-name {
+        display: block;
+        margin-bottom: 3px;
+        font-weight: bold;
+        color: #c62828;
+    }
+
+    .moves {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 14px;
+    }
+
+    .move {
+        min-width: 0;
+        min-height: 18px;
+        padding: 9px 6px;
+        background: #fce4ec;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 14px;
+        overflow-wrap: anywhere;
+    }
+
+    .empty {
+        margin-top: 30px;
+        color: #888;
+        text-align: center;
+    }
+
+    .button-area {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 35px;
+    }
+
+    .edit-btn,
+    .delete-btn {
+        display: inline-block;
+        min-width: 120px;
+        box-sizing: border-box;
+        padding: 12px 24px;
+        border-radius: 10px;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: bold;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, .2);
+        transition: .25s;
+    }
+
+    .edit-btn {
+        background: #1976d2;
+    }
+
+    .delete-btn {
+        background: #d32f2f;
+    }
+
+    .edit-btn:hover {
+        background: #1565c0;
+        transform: translateY(-2px);
+    }
+
+    .delete-btn:hover {
+        background: #c62828;
+        transform: translateY(-2px);
+    }
+
+    .edit-btn:active,
+    .delete-btn:active {
+        transform: translateY(1px);
+    }
+
+    @media (max-width: 700px) {
+        .detail-container {
+            width: 92%;
+            margin: 25px auto;
+        }
+
+        .team-card {
+            padding: 22px;
+        }
+
+        .team-title {
+            font-size: 26px;
+        }
+
+        .pokemon-list {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .pokemon-card {
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .status-box {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .button-area {
+            flex-direction: column;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            width: 100%;
+        }
+    }
+
+    .team-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 12px 0 18px;
+    }
+    
+    .team-tag {
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: #ffebee;
+        color: #c62828;
+        font-size: 13px;
+        font-weight: bold;
+    }
+</style>
+
+<div class="detail-container">
+
+    <div class="team-card">
+        <h2 class="team-title">
+            {{ team.title }}
+        </h2>
+
+        <p class="author">
+            投稿者：{{ team.author }}
+        </p>
+
+        <p class="description">
+            {{ team.description }}
+        </p>
+
+        {% if team.tags.all %}
+            <div class="team-tags">
+                {% for tag in team.tags.all %}
+                    <span class="team-tag">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <h3 class="section-title">
+        ポケモン一覧
+    </h3>
+
+    {% if team.pokemons.all %}
+        <div class="pokemon-list">
+
+            {% for pokemon in team.pokemons.all %}
+                <div class="pokemon-card">
+
+                    <div class="slot-badge">
+                        Slot {{ pokemon.slot }}
+                    </div>
+
+                    {% if pokemon.image %}
+                        <div class="pokemon-image">
+                            <img
+                                src="{{ pokemon.image.url }}"
+                                alt="{{ pokemon.name }}"
+                            >
+                        </div>
+                    {% else %}
+                        <div class="pokemon-image"></div>
+                    {% endif %}
+
+                    <div class="pokemon-name">
+                        {{ pokemon.name }}
+                    </div>
+
+                    <p class="info-row">
+                        <span class="label">持ち物：</span>
+                        {{ pokemon.item }}
+                    </p>
+
+                    <p class="info-row">
+                        <span class="label">特性：</span>
+                        {{ pokemon.ability }}
+                    </p>
+
+                    <p class="info-row">
+                        <span class="label">性格：</span>
+                        {{ pokemon.nature }}
+                    </p>
+
+                    <div class="status-box">
+                        <div class="status-item">
+                            <span class="status-name">HP</span>
+                            {{ pokemon.h_Status }}
+                        </div>
+
+                        <div class="status-item">
+                            <span class="status-name">A</span>
+                            {{ pokemon.a_Status }}
+                        </div>
+
+                        <div class="status-item">
+                            <span class="status-name">B</span>
+                            {{ pokemon.b_Status }}
+                        </div>
+
+                        <div class="status-item">
+                            <span class="status-name">C</span>
+                            {{ pokemon.c_Status }}
+                        </div>
+
+                        <div class="status-item">
+                            <span class="status-name">D</span>
+                            {{ pokemon.d_Status }}
+                        </div>
+
+                        <div class="status-item">
+                            <span class="status-name">S</span>
+                            {{ pokemon.s_Status }}
+                        </div>
+                    </div>
+
+                    <div class="moves">
+                        <div class="move">
+                            {{ pokemon.move1 }}
+                        </div>
+
+                        <div class="move">
+                            {{ pokemon.move2 }}
+                        </div>
+
+                        <div class="move">
+                            {{ pokemon.move3 }}
+                        </div>
+
+                        <div class="move">
+                            {{ pokemon.move4 }}
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
+
+        </div>
+    {% else %}
+        <p class="empty">
+            登録されているポケモンがいません。
+        </p>
+    {% endif %}
+
+    <div class="button-area">
+        <a href="{% url 'pokemonTeams:update' team.pk %}" class="edit-btn">
+            編集
+        </a>
+
+        <a href="{% url 'pokemonTeams:delete' team.pk %}" class="delete-btn">
+            削除
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

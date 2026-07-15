@@ -1,0 +1,455 @@
+{% extends "base.html" %}
+
+{% block title %}
+チーム作成
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .create-container{
+        width:80%;
+        max-width:900px;
+        margin:40px auto;
+        background:#fff;
+        padding:30px;
+        border-radius:12px;
+        box-shadow:0 4px 12px rgba(0,0,0,.15);
+    }
+
+    .create-container h2{
+        text-align:center;
+        color:#d32f2f;
+        margin-bottom:30px;
+    }
+
+    .form-area label{
+        display:block;
+        font-weight:bold;
+        margin-bottom:6px;
+    }
+
+    .form-area input,
+    .form-area select,
+    .form-area textarea{
+        width:100%;
+        padding:10px;
+        border:1px solid #ccc;
+        border-radius:6px;
+        box-sizing:border-box;
+        font-size:15px;
+    }
+
+    .form-area input[type="file"]{
+        background:#fff;
+        padding:8px;
+        cursor:pointer;
+    }
+
+    .team-area p{
+        margin-bottom:18px;
+    }
+
+    .pokemon-slot{
+        margin-top:25px;
+        padding:20px;
+        border:1px solid #ddd;
+        border-radius:10px;
+        background:#fafafa;
+    }
+
+    .pokemon-slot h3{
+        margin-top:0;
+        color:#333;
+        border-left:5px solid #d32f2f;
+        padding-left:10px;
+    }
+
+    .field{
+        margin-bottom:16px;
+    }
+
+    .nature-row{
+        display:flex;
+        align-items:flex-end;
+        gap:18px;
+        margin-bottom:16px;
+    }
+
+    .nature-input{
+        flex:1;
+    }
+
+    .nature-effect{
+        min-width:190px;
+        padding-bottom:11px;
+        font-size:14px;
+        font-weight:bold;
+        white-space:nowrap;
+    }
+
+    .nature-effect .up{
+        color:#e53935;
+        margin-right:14px;
+    }
+
+    .nature-effect .down{
+        color:#1e88e5;
+    }
+
+    .status-grid,
+    .move-grid{
+        display:grid;
+        grid-template-columns:repeat(2, 1fr);
+        gap:14px;
+    }
+
+    .hidden-slot{
+        display:none;
+    }
+
+    .submit-btn{
+        width:100%;
+        margin-top:30px;
+        padding:14px;
+        border:none;
+        border-radius:8px;
+        background:#d32f2f;
+        color:white;
+        font-size:17px;
+        font-weight:bold;
+        cursor:pointer;
+        transition:.2s;
+    }
+
+    .submit-btn:hover{
+        background:#b71c1c;
+    }
+
+    .back-link{
+        display:block;
+        text-align:center;
+        margin-top:20px;
+        color:#d32f2f;
+        text-decoration:none;
+    }
+
+    .back-link:hover{
+        text-decoration:underline;
+    }
+
+    .errorlist{
+        color:red;
+        list-style:none;
+        padding:0;
+        margin:5px 0 10px;
+        font-size:14px;
+    }
+
+    @media(max-width:700px){
+        .create-container{
+            width:90%;
+            padding:20px;
+        }
+
+        .nature-row{
+            display:block;
+        }
+
+        .nature-effect{
+            padding-bottom:0;
+            margin-top:6px;
+        }
+
+        .status-grid,
+        .move-grid{
+            grid-template-columns:1fr;
+        }
+    }
+
+    .form-area input[type="checkbox"] {
+        width: auto;
+        margin-right: 8px;
+    }
+
+    #id_tags {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        padding: 0;
+    }
+
+    #id_tags div {
+        margin: 0;
+    }
+
+    #id_tags label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="create-container">
+    <h2>構築作成</h2>
+
+
+<form
+    method="post"
+    class="form-area"
+    enctype="multipart/form-data"
+>
+    {% csrf_token %}
+
+    <div class="team-area">
+        {{ team_form.as_p }}
+    </div>
+
+    {{ pokemon_formset.management_form }}
+    {{ pokemon_formset.non_form_errors }}
+
+    {% for form in pokemon_formset %}
+        <div class="pokemon-slot {% if not forloop.first %}hidden-slot{% endif %}">
+
+            <h3>Slot {{ forloop.counter }}</h3>
+
+            {{ form.non_field_errors }}
+
+            {{ form.id }}
+
+            <div style="display:none;">
+                {{ form.slot }}
+            </div>
+
+            <div class="field">
+                {{ form.image.label_tag }}
+                {{ form.image }}
+                {{ form.image.errors }}
+            </div>
+
+            <div class="field">
+                {{ form.name.label_tag }}
+                {{ form.name }}
+                {{ form.name.errors }}
+            </div>
+
+            <div class="field">
+                {{ form.item.label_tag }}
+                {{ form.item }}
+                {{ form.item.errors }}
+            </div>
+
+            <div class="field">
+                {{ form.ability.label_tag }}
+                {{ form.ability }}
+                {{ form.ability.errors }}
+            </div>
+
+            <div class="nature-row">
+                <div class="nature-input">
+                    {{ form.nature.label_tag }}
+                    {{ form.nature }}
+                    {{ form.nature.errors }}
+                </div>
+
+                <div class="nature-effect"></div>
+            </div>
+
+            <div class="status-grid">
+                <div class="field">
+                    {{ form.h_Status.label_tag }}
+                    {{ form.h_Status }}
+                    {{ form.h_Status.errors }}
+                </div>
+
+                <div class="field">
+                    {{ form.a_Status.label_tag }}
+                    {{ form.a_Status }}
+                    {{ form.a_Status.errors }}
+                </div>
+
+                <div class="field">
+                    {{ form.b_Status.label_tag }}
+                    {{ form.b_Status }}
+                    {{ form.b_Status.errors }}
+                </div>
+
+                <div class="field">
+                    {{ form.c_Status.label_tag }}
+                    {{ form.c_Status }}
+                    {{ form.c_Status.errors }}
+                </div>
+
+                <div class="field">
+                    {{ form.d_Status.label_tag }}
+                    {{ form.d_Status }}
+                    {{ form.d_Status.errors }}
+                </div>
+
+                <div class="field">
+                    {{ form.s_Status.label_tag }}
+                    {{ form.s_Status }}
+                    {{ form.s_Status.errors }}
+                </div>
+            </div>
+
+            <div class="move-grid">
+                <div class="field">
+                    {{ form.move1.label_tag }}
+                    {{ form.move1 }}
+                    {{ form.move1.errors }}
+                </div>
+
+                <div class="field">
+                    {{ form.move2.label_tag }}
+                    {{ form.move2 }}
+                    {{ form.move2.errors }}
+                </div>
+
+                <div class="field">
+                    {{ form.move3.label_tag }}
+                    {{ form.move3 }}
+                    {{ form.move3.errors }}
+                </div>
+
+                <div class="field">
+                    {{ form.move4.label_tag }}
+                    {{ form.move4 }}
+                    {{ form.move4.errors }}
+                </div>
+            </div>
+
+            {% if form.DELETE %}
+                <div style="display:none;">
+                    {{ form.DELETE }}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="submit-btn">
+        チームを作成
+    </button>
+</form>
+
+<a href="{% url 'pokemonTeams:index' %}" class="back-link">
+    一覧へ戻る
+</a>
+
+
+</div>
+
+<script>
+    const natureEffects = {
+        "さみしがり": ["こうげき", "ぼうぎょ"],
+        "いじっぱり": ["こうげき", "とくこう"],
+        "やんちゃ": ["こうげき", "とくぼう"],
+        "ゆうかん": ["こうげき", "すばやさ"],
+
+        "ずぶとい": ["ぼうぎょ", "こうげき"],
+        "わんぱく": ["ぼうぎょ", "とくこう"],
+        "のうてんき": ["ぼうぎょ", "とくぼう"],
+        "のんき": ["ぼうぎょ", "すばやさ"],
+
+        "ひかえめ": ["とくこう", "こうげき"],
+        "おっとり": ["とくこう", "ぼうぎょ"],
+        "うっかりや": ["とくこう", "とくぼう"],
+        "れいせい": ["とくこう", "すばやさ"],
+
+        "おだやか": ["とくぼう", "こうげき"],
+        "おとなしい": ["とくぼう", "ぼうぎょ"],
+        "しんちょう": ["とくぼう", "とくこう"],
+        "なまいき": ["とくぼう", "すばやさ"],
+
+        "おくびょう": ["すばやさ", "こうげき"],
+        "せっかち": ["すばやさ", "ぼうぎょ"],
+        "ようき": ["すばやさ", "とくこう"],
+        "むじゃき": ["すばやさ", "とくぼう"],
+
+        "がんばりや": null,
+        "すなお": null,
+        "まじめ": null,
+        "てれや": null,
+        "きまぐれ": null,
+    };
+
+    document.querySelectorAll(".nature-row").forEach(row => {
+        const natureInput = row.querySelector("input, select");
+        const effectBox = row.querySelector(".nature-effect");
+
+        if(!natureInput || !effectBox){
+            return;
+        }
+
+        function showNatureEffect(){
+            const nature = natureInput.value.trim();
+            const effect = natureEffects[nature];
+
+            if(effect === null){
+                effectBox.innerHTML =
+                    '<span style="color:#555;">補正なし</span>';
+            }else if(effect){
+                effectBox.innerHTML = `
+                    <span class="up">▲ ${effect[0]}</span>
+                    <span class="down">▼ ${effect[1]}</span>
+                `;
+            }else{
+                effectBox.innerHTML = "";
+            }
+        }
+
+        natureInput.addEventListener("input", showNatureEffect);
+        natureInput.addEventListener("change", showNatureEffect);
+
+        showNatureEffect();
+    });
+
+    const slots = document.querySelectorAll(".pokemon-slot");
+
+    slots.forEach((slot, index) => {
+        const inputs = slot.querySelectorAll(
+            "input, select, textarea"
+        );
+
+        function showNextSlot(){
+            let hasValue = false;
+
+            inputs.forEach(field => {
+                if(
+                    field.type !== "checkbox" &&
+                    field.type !== "hidden" &&
+                    field.value !== ""
+                ){
+                    hasValue = true;
+                }
+            });
+
+            if(hasValue && slots[index + 1]){
+                slots[index + 1].classList.remove("hidden-slot");
+            }
+        }
+
+        inputs.forEach(input => {
+            input.addEventListener("input", showNextSlot);
+            input.addEventListener("change", showNextSlot);
+        });
+
+        showNextSlot();
+    });
+
+    slots.forEach((slot, index) => {
+        const slotInput = slot.querySelector(
+            'input[name$="-slot"]'
+        );
+
+        if(slotInput){
+            slotInput.value = index + 1;
+        }
+    });
+</script>
+
+{% endblock %}

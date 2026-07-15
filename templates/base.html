@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Pokemon Teams{% endblock %}</title>
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body{
+            margin: 0;
+            background-color: #f5f5f5;
+            font-family: "Yu Gothic", sans-serif;
+
+             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        
+            
+    header{
+        background: linear-gradient(to right, #e53935, #c62828);
+        border-bottom: 5px solid #222;
+        box-shadow: 0 4px 10px rgba(0,0,0,.3);
+        padding: 15px 0;
+    }
+    
+    .header-inner{
+        width:90%;
+        max-width:1100px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin:0 auto;
+    }
+    
+    .header-left,
+    .header-right{
+        width:260px;
+    }
+    
+    .header-right{
+        display:flex;
+        justify-content:flex-end;
+        align-items:center;
+        gap:10px;
+    }
+    
+    .title{
+        width:350px;
+        height:auto;
+        transition:transform .25s;
+    }
+    
+    .title:hover{
+        transform:scale(1.05);
+    }
+    
+    .login-user{
+        color:white;
+        font-weight:bold;
+        font-size:14px;
+        white-space:nowrap;
+    }
+    
+    .header-btn{
+        display:inline-block;
+        border:none;
+        padding:8px 13px;
+        border-radius:6px;
+        background:#fff;
+        color:#d32f2f;
+        font-weight:bold;
+        text-decoration:none;
+        cursor:pointer;
+        font-size:14px;
+    }
+    
+    .header-btn:hover{
+        background:#ffecec;
+    }
+    
+    .signup-btn{
+        background:#222;
+        color:white;
+    }
+    
+    .signup-btn:hover{
+        background:#444;
+    }
+    
+    footer {
+        padding: 30px 0;
+        background-color: #222;
+        color: white;
+        text-align: center;
+        border-top: 3px solid #e53935;
+    }
+    
+</style>
+</head>
+<body>
+    <header>
+        
+        <div class="header-inner">
+            <div class="header-left"></div>
+
+            <a href="{% url 'pokemonTeams:index' %}">
+                <img src="{% static 'pokemonTeams/img/title.png' %}" alt="タイトル" class="title">
+            </a>
+
+            <div class="header-right">
+                {% if user.is_authenticated %}
+                    <span class="login-user">
+                        {{ user.username }} でログイン中
+                    </span>
+
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="header-btn">ログアウト</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="header-btn">ログイン</a>
+                    <a href="{% url 'pokemonTeams:signup' %}" class="header-btn signup-btn">新規登録</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
+    <footer>
+        <p>&copy; 2026 Pokemon Teams. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

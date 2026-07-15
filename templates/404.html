@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}
+404 Not Found
+{% endblock %}
+
+{% block content %}
+
+<style>
+.error-page{
+    width:90%;
+    max-width:700px;
+    margin:80px auto;
+    text-align:center;
+}
+
+.error-code{
+    font-size:90px;
+    color:#e53935;
+    font-weight:bold;
+    margin:0;
+}
+
+.error-title{
+    font-size:32px;
+    margin:20px 0;
+}
+
+.error-message{
+    color:#666;
+    margin-bottom:30px;
+}
+
+.home-btn{
+    display:inline-block;
+    padding:12px 24px;
+    background:#e53935;
+    color:white;
+    text-decoration:none;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+.home-btn:hover{
+    opacity:.85;
+}
+</style>
+
+<div class="error-page">
+
+    <h1 class="error-code">404</h1>
+
+    <h2 class="error-title">
+        ページが見つかりません
+    </h2>
+
+    <p class="error-message">
+        URLが間違っているか、閲覧権限がありません。
+    </p>
+
+    <a href="{% url 'pokemonTeams:index' %}" class="home-btn">
+        トップページへ戻る
+    </a>
+
+</div>
+
+{% endblock %}

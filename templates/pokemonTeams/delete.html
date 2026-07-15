@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}
+構築記事を削除
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .delete-container {
+        width: 90%;
+        max-width: 600px;
+        margin: 60px auto;
+    }
+
+    .delete-card {
+        background: white;
+        border-radius: 14px;
+        padding: 32px;
+        box-shadow: 0 4px 14px rgba(0,0,0,.15);
+        border-top: 6px solid #d32f2f;
+        text-align: center;
+    }
+
+    .delete-title {
+        margin-top: 0;
+        color: #c62828;
+        font-size: 28px;
+    }
+
+    .delete-message {
+        margin: 24px 0;
+        line-height: 1.8;
+        color: #444;
+    }
+
+    .team-name {
+        font-weight: bold;
+        color: #c62828;
+    }
+
+    .warning {
+        background: #ffebee;
+        color: #b71c1c;
+        padding: 14px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+    }
+
+    .button-area {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+    }
+
+    .cancel-btn,
+    .delete-btn {
+        display: inline-block;
+        min-width: 120px;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 9px;
+        font-size: 15px;
+        font-weight: bold;
+        text-decoration: none;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    .cancel-btn {
+        background: #757575;
+        color: white;
+    }
+
+    .delete-btn {
+        background: #d32f2f;
+        color: white;
+    }
+
+    .cancel-btn:hover,
+    .delete-btn:hover {
+        opacity: .85;
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 500px) {
+        .button-area {
+            flex-direction: column;
+        }
+
+        .cancel-btn,
+        .delete-btn {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+</style>
+
+<div class="delete-container">
+
+
+<div class="delete-card">
+
+    <h2 class="delete-title">構築記事を削除</h2>
+
+    <p class="delete-message">
+        「<span class="team-name">{{ team.title }}</span>」を<br>
+        本当に削除しますか？
+    </p>
+
+    <div class="warning">
+        削除した記事は元に戻せません。
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="button-area">
+            <a href="{% url 'pokemonTeams:detail' team.pk %}"
+               class="cancel-btn">
+                キャンセル
+            </a>
+
+            <button type="submit" class="delete-btn">
+                削除する
+            </button>
+        </div>
+    </form>
+
+</div>
+
+
+</div>
+
+{% endblock %}

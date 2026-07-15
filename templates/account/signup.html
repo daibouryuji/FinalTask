@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}
+新規登録
+{% endblock %}
+
+{% block content %}
+<style>
+    .signup-container{
+        max-width:400px;
+        margin:50px auto;
+        background:#fff;
+        padding:30px;
+        border-radius:10px;
+        box-shadow:0 4px 10px rgba(0,0,0,.15);
+    }
+
+    .signup-container h2{
+        text-align:center;
+        margin-bottom:25px;
+        color:#d32f2f;
+    }
+
+    .signup-container p{
+        margin-bottom:15px;
+    }
+
+    .signup-container label{
+        display:block;
+        margin-bottom:6px;
+        font-weight:bold;
+    }
+
+    .signup-container input{
+        width:100%;
+        padding:10px;
+        border:1px solid #ccc;
+        border-radius:6px;
+        box-sizing:border-box;
+        font-size:16px;
+    }
+
+    .signup-container button{
+        width:100%;
+        padding:12px;
+        margin-top:20px;
+        border:none;
+        border-radius:6px;
+        background:#d32f2f;
+        color:white;
+        font-size:16px;
+        cursor:pointer;
+        transition:.2s;
+    }
+
+    .signup-container button:hover{
+        background:#b71c1c;
+    }
+
+    .errorlist{
+        color:red;
+        list-style:none;
+        padding:0;
+        margin-bottom:10px;
+    }
+
+    .helptext{
+        font-size:12px;
+        color:#666;
+    }
+
+    ul{
+        padding-left:20px;
+        color:#666;
+        font-size:12px;
+    }
+</style>
+
+<div class="signup-container">
+    <h2>新規登録</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">登録する</button>
+    </form>
+</div>
+
+{% endblock %}
