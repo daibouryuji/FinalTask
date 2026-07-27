@@ -19,7 +19,7 @@ class TeamForm(forms.ModelForm):
             "description":forms.Textarea(attrs={
                 "placeholder" : "ポケモンの名前、技など詳細に書くほど検索にヒットしやすくなります。"
             }),
-            "tags": forms.CheckboxSelectMultiple
+            "tags": forms.CheckboxSelectMultiple(),
         }
 
 
