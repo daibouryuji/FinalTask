@@ -14,7 +14,7 @@ class TeamForm(forms.ModelForm):
         }
         widgets = {
             "title" : forms.TextInput(attrs={
-                "placeholder" : "例 ガルがブゲンボルトバシャスイクン"
+                "placeholder" : "例 ガルガブゲンボルトバシャスイクン"
             }),
             "description":forms.Textarea(attrs={
                 "placeholder" : "ポケモンの名前、技など詳細に書くほど検索にヒットしやすくなります。"
